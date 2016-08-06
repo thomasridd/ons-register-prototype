@@ -1,4 +1,27 @@
 <!DOCTYPE html>
+
+<!-- 
+FIELDS REQUIRED
+RegisterTitle
+RegisterLink
+MinRecord
+MaxRecord
+TotalRecords
+
+HeaderData
+RowData
+
+PageNumber
+PageTotal
+
+PreviousVisibility
+PreviousLink
+
+NextVisibility
+NextLink
+
+-->
+
 <!-- saved from url=(0039)https://country.register.gov.uk/records -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
@@ -16,8 +39,7 @@
     <div class="header-wrapper">
         <div class="header-global">
             <div class="header-logo">
-                
-                <a id="logo" class="content" href="https://country.register.gov.uk/">{{RegisterTitle}}</a>
+                <a id="logo" class="content" href="{{RegisterLink}}">{{RegisterTitle}}</a>
             </div>
         </div>
     </div>
@@ -94,14 +116,14 @@
 
     <nav class="previous-and-next-navigation" role="navigation" aria-label="Pagination">
     <ul class="group">
-        <li class="previous-page" style="visibility:">
-            <a rel="previous" href="?page-index=1&amp;page-size=100">
+        <li class="previous-page" style="visibility:{{PreviousVisibility}}">
+            <a rel="previous" href="{{PreviousLink}}">
                 <span class="pagination-part-title">Previous page</span>
             </a>
         </li>
 
-        <li class="next-page"  style="visibility:hidden">
-            <a rel="next" href="https://country.register.gov.uk/records?page-index=2&amp;page-size=100">
+        <li class="next-page"  style="visibility:{{NextVisibility}}">
+            <a rel="next" href="{{NextLink}}">
                 <span class="pagination-part-title">Next page</span>
             </a>
         </li>
