@@ -93,3 +93,4 @@ buildRecordsIndexPageRow <- function(data, detailFields, row) {
   rowData <- paste(rowData, collapse = " ")
   return(rowData)
 }
+

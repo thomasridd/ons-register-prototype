@@ -1,1 +1,20 @@
-field,datatype,phase,register,cardinality,textid,string,prototype,ons-products,1,Unofficial unique publication identifieruri,string,prototype,ons-products,1,Unique Resource Identifier using the ONS website taxonomytype,string,prototype,ons-products,1,Type of register entrytitle,string,prototype,ons-products,1,Publication title of statistical publicationsummary,string,prototype,ons-products,1,Summary of the register entrymetaDescription,string,prototype,ons-products,1,Description of statistical publication from website metadatacontactEmail,string,prototype,ons-products,1,Published contact emailcontactName,string,prototype,ons-products,1,Published contactcontactTelephone,string,prototype,ons-products,1,Published contact telephone numberstart-date,datetime,prototype,ons-products,1,Start datetime for the applicability of a register entry.end-date,datetime,prototype,ons-products,1,End datetime for the applicability of a register entry.field,string,prototype,fields,1,Field name of register entry.datatype,string,prototype,fields,1,The data type for constraining a field value.phase,string,prototype,fields,1,Phase of a register or service as defined by the [digital service manual](https://www.gov.uk/service-manual).register,string,prototype,fields,1,A register name.cardinality,string,prototype,fields,1,Number of elements of the set (1 or n).text,text,prototype,fields,1,Description of register entry.description,text,prototype,ons-taxonomy,1,Description of register entry.
+field,datatype,phase,register,cardinality,text
+id,string,prototype,ons-products,1,Unofficial unique publication identifier
+uri,string,prototype,ons-products,1,Unique Resource Identifier using the ONS website taxonomy
+type,string,prototype,ons-products,1,Type of register entry
+title,string,prototype,ons-products,1,Publication title of statistical publication
+summary,string,prototype,ons-products,1,Summary of the register entry
+metaDescription,string,prototype,ons-products,1,Description of statistical publication from website metadata
+contactEmail,string,prototype,ons-products,1,Published contact email
+contactName,string,prototype,ons-products,1,Published contact
+contactTelephone,string,prototype,ons-products,1,Published contact telephone number
+start-date,datetime,prototype,ons-products,1,Start datetime for the applicability of a register entry.
+end-date,datetime,prototype,ons-products,1,End datetime for the applicability of a register entry.
+field,string,prototype,fields,1,Field name of register entry.
+datatype,string,prototype,fields,1,The data type for constraining a field value.
+phase,string,prototype,fields,1,Phase of a register or service as defined by the [digital service manual](https://www.gov.uk/service-manual).
+register,string,prototype,fields,1,A register name.
+cardinality,string,prototype,fields,1,Number of elements of the set (1 or n).
+text,text,prototype,fields,1,Description of register entry.
+description,text,prototype,ons-taxonomy,1,Description of register entry.
+ons-taxonomy.area,ons-taxonomy,prototype,ons-products,1,The ONS taxonomy area the product belongs to
