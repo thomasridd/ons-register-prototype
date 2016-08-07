@@ -2,6 +2,12 @@
 source("fluff.R")
 source("register_index_page_builder.R")
 
+buildHomepage <- function(path, registers) {
+  copyAssets("templates/files",".")
+  registerValues <- paste("<dd><a href=\"",registers,"\">",registers,"<span class=\"visuallyhidden\"></a></dd>")
+  registerLinks <- paste(registerValues, collapse = "")
+  lines <- fluff("templates/homepage.htm", c("RegisterLinks"), c(registerLinks))
+  write(lines, path)
 }
 
 buildRegister <- function(data, registerName, registerPath, detailFields, assetPath = "templates/files", idField = "id", linkFields = F) {
