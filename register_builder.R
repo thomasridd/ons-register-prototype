@@ -37,17 +37,24 @@ buildSingleRecordsPages <- function(data, registerName, registerPath, idField = 
     json <- toJSON(item)
     write(json, paste(registerPath, "record", id,"data.json", sep="/"))
     
-    html <- fluffSingleRecordsPage(item, registerName, 1, idField)
+    html <- fluffSingleRecordsPage(item, registerName, 1, idField, linkFields)
     write(html, paste(registerPath, "record", id,"index.html", sep="/"))
   }
 }
 
-fluffSingleRecordsPage <- function(data, registerName, row, idField = "id") {
+fluffSingleRecordsPage <- function(data, registerName, row, idField, linkFields) {
   rowData = c()
   cols <- colnames(data)
   for(i in 1:ncol(data)) {
+    
+    if(linkFields) {
+      link <- paste("../../../fields/record/",cols[i], sep="")
+    } else {
+      link <- "#"
+    }
+    
     newRows <- fluff(url = "templates/record/id/tablecell.htm", 
-                     replaceFields = c("FieldName", "FieldValue"), withValues = c(cols[i], data[row, i]))
+                     replaceFields = c("FieldName", "FieldValue", "FieldLink"), withValues = c(cols[i], data[row, i], link))
     rowData <- c(rowData,newRows)
   }
   rowData <- paste(rowData, collapse = " ")
