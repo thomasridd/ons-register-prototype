@@ -24,7 +24,10 @@ buildRootRecord <- function(data, registerName, registerPath) {
   lines <- fluff("templates/template.htm", 
                  c("RegisterTitle", "RegisterLink", "RecordCount", "FieldList"),
                  c(registerName, "", nrow(data), fieldList))
+  json <- paste("{\"title\":\"", registerName, "\", \"register\":\"", registerPath, 
+                "\", \"records\":", nrow(data),"}", sep="")
   write(x = lines, file = paste(registerPath,"index.htm",sep="/"))
+  write(x = json, file = paste(registerPath,"data.json",sep="/"))
 }
 
 # Create the details page for individual register items
