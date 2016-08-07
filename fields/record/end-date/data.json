@@ -1,0 +1,1 @@
+[{"field":"end-date","datatype":"datetime","phase":"prototype","register":"ons-products","cardinality":1,"text":"End datetime for the applicability of a register entry.","start-date":"","end-date":""}]
