@@ -57,11 +57,11 @@ fluffSingleRecordsPage <- function(data, registerName, row, idField = "id") {
   return(fullData)
 }
 
-buildRecordsIndexPages <- function(data, registerName, registerPath, detailFields, idField, recordsPerPage = 100) {
+buildRecordsIndexPages <- function(data, registerName, registerPath, detailFields, idField, linkFields, recordsPerPage = 100) {
   pageMax = ((nrow(data) - 1) %% recordsPerPage) + 1
   dir.create(paste(registerPath, "records", sep="/"))
   for(i in 1:pageMax) {
-    html <- buildRecordsIndexPage(data, registerName, registerPath, detailFields, i, idField, recordsPerPage)
+    html <- buildRecordsIndexPage(data, registerName, registerPath, detailFields, i, idField, linkFields, recordsPerPage)
     if(i == 1) {
       write(html, paste(registerPath, "records/index.htm", sep="/"))
     } else {
@@ -69,14 +69,14 @@ buildRecordsIndexPages <- function(data, registerName, registerPath, detailField
     }
   }
 }
-buildRecordsIndexPage <- function(data, registerName, registerPath, detailFields, pageNo, idField, recordsPerPage = 100) {
+buildRecordsIndexPage <- function(data, registerName, registerPath, detailFields, pageNo, idField, linkFields, recordsPerPage = 100) {
   RegisterTitle <- registerName
   RegisterLink <- "#"
   MinRecord <- (recordsPerPage * pageNo) + 1 - 100
   MaxRecord <- min(nrow(data), MinRecord + recordsPerPage - 1)
   TotalRecords <- nrow(data)
   
-  HeaderData <- buildRecordsIndexPageHeaders(detailFields)
+  HeaderData <- buildRecordsIndexPageHeaders(detailFields, linkFields)
   RowData <- buildRecordsIndexPageRows(data, detailFields, MinRecord, MaxRecord, idField)
   
   PageNumber <- pageNo
@@ -109,16 +109,24 @@ buildRecordsIndexPage <- function(data, registerName, registerPath, detailFields
   
   return(html)
 }
-buildRecordsIndexPageHeaders <- function(detailFields) {
+buildRecordsIndexPageHeaders <- function(detailFields, linkFields) {
   rowData = c()
+  
+  
   for(detail in detailFields) {
-    newRows <- fluff("templates/records/headercell.htm", replaceFields = c("FieldName"), withValues = c(detail))
+    
+    if(linkFields) {
+      link <- paste("../../fields/record/",detail, sep="")
+    } else {
+      link <- "#"
+    }
+    
+    newRows <- fluff("templates/records/headercell.htm", replaceFields = c("FieldName","FieldLink"), withValues = c(detail, link))
     rowData <- c(rowData,newRows)
   }
   rowData <- paste(rowData, collapse = " ")
   return(rowData)
 }
-
 buildRecordsIndexPageRows <- function(data, detailFields, min, max, idField){
   rowData = c()
   fields <- detailFields[detailFields != idField]
@@ -132,7 +140,6 @@ buildRecordsIndexPageRows <- function(data, detailFields, min, max, idField){
   rowData <- paste(rowData, collapse = " ")
   return(rowData)
 }
-
 buildRecordsIndexPageRow <- function(data, detailFields, row) {
   rowData = c()
   for(i in 1:length(detailFields)) {
@@ -144,9 +151,9 @@ buildRecordsIndexPageRow <- function(data, detailFields, row) {
   return(rowData)
 }
 
-buildRegister <- function(data, registerName, registerPath, detailFields, idField = "id") {
+buildRegister <- function(data, registerName, registerPath, detailFields, idField = "id", linkFields = F) {
   copyCSS(registerPath)
   buildRootRecord(data, registerName, registerPath)
-  buildRecordsIndexPages(data, registerName, registerPath, detailFields, idField)
-  buildSingleRecordsPages(data, registerName, registerPath, idField)
+  buildRecordsIndexPages(data, registerName, registerPath, detailFields, idField, linkFields)
+  buildSingleRecordsPages(data, registerName, registerPath, idField, linkFields)
 }
