@@ -49,10 +49,22 @@ buildSingleRecordsPages <- function(data, registerName, registerPath,  idField, 
   }
 }
 
+valueLink <- function(fieldName, fieldValue, linkToRoot) {
+  elements <- strsplit(fieldName, ".", fixed = T)[[1]]
+  if(length(elements) == 1) {
+    return("")
+  } else {
+    return(paste(linkToRoot,elements[1],"record",fieldValue, sep = "/"))
+  }
+}
+
 fluffSingleRecordsPage <- function(data, registerName, row, idField, linkFields) {
   rowData = c()
   cols <- colnames(data)
   for(i in 1:ncol(data)) {
+    
+    fieldname <- cols[i]
+    fieldvalue <- data[row, i]
     
     if(linkFields) {
       link <- paste("../../../fields/record/",cols[i], sep="")
@@ -60,9 +72,19 @@ fluffSingleRecordsPage <- function(data, registerName, row, idField, linkFields)
       link <- "#"
     }
     
-    newRows <- fluff(url = "templates/record/id/tablecell.htm", 
-                     replaceFields = c("FieldName", "FieldValue", "FieldLink"), withValues = c(cols[i], data[row, i], link))
-    rowData <- c(rowData,newRows)
+    vLink <- valueLink(fieldname, fieldvalue, "../../..")
+    if(vLink == "") {
+      newRows <- fluff(url = "templates/record/id/tablecell.htm", 
+                     replaceFields = c("FieldName", "FieldValue", "FieldLink"), 
+                     withValues = c(cols[i], data[row, i], link))
+      rowData <- c(rowData,newRows)
+    } else {
+      newRows <- fluff(url = "templates/record/id/linkedtablecell.htm", 
+                       replaceFields = c("FieldName", "FieldValue", "FieldLink", "ValueLink"), 
+                       withValues = c(cols[i], data[row, i], link, vLink))
+      rowData <- c(rowData,newRows)
+    }
+    
   }
   rowData <- paste(rowData, collapse = " ")
   fullData <- fluff(url = "templates/record/id/template.htm", 
@@ -71,4 +93,10 @@ fluffSingleRecordsPage <- function(data, registerName, row, idField, linkFields)
   return(fullData)
 }
 
+readRegisterFile <- function(path) {
+  df <- read.csv(path, stringsAsFactors = F)
+  df[,"start-date"] <- ""
+  df[, "end-date"] <- ""
+  df
+}
 
