@@ -1,15 +1,21 @@
-
-
+library("stringr")
+# Fluff - Templating function 
+# 
+# It's a long way from Mustache or Handlebars
 fluff <- function(url, replaceFields, withValues) {
-  lines <- readLines(url)
+  lines <- readLines(url,encoding = "UTF-8")
+  lines <- iconv(lines, "UTF-8", "UTF-8",sub='') 
+  
   for(i in 1:length(replaceFields)) {
     replaceValue <- paste("{{", replaceFields[i], "}}", sep="")
     replaceWith <- withValues[i]
+    
     lines <- gsub(replaceValue, replaceWith, lines, fixed = TRUE)
   }
   return(lines)
 }
 
+# Copy asset files to the root of the register
 copyCSS <- function(registerPath) {
   dir.create(path = registerPath, showWarnings = FALSE)
   file.copy(from="templates/files", to=registerPath, 
@@ -17,6 +23,8 @@ copyCSS <- function(registerPath) {
             copy.mode = TRUE)  
 }
 
+# Create the root register page
+# Example: https://country.register.gov.uk/
 buildRootRecord <- function(data, registerName, registerPath) {
   fieldList <- paste(colnames(data), collapse=", ")
   lines <- fluff("templates/template.htm", 
@@ -25,7 +33,9 @@ buildRootRecord <- function(data, registerName, registerPath) {
   write(x = lines, file = paste(registerPath,"index.htm",sep="/"))
 }
 
-buildSingleRecordsPages <- function(data, registerName, registerPath, idField = "id") {
+# Create the details page for individual register items
+# Example: https://country.register.gov.uk/record/VA
+buildSingleRecordsPages <- function(data, registerName, registerPath,  idField, linkFields) {
   ids <- data[, idField]
   
   dir.create(paste(registerPath, "record", sep="/"))
@@ -65,7 +75,7 @@ fluffSingleRecordsPage <- function(data, registerName, row, idField, linkFields)
 }
 
 buildRecordsIndexPages <- function(data, registerName, registerPath, detailFields, idField, linkFields, recordsPerPage = 100) {
-  pageMax = ((nrow(data) - 1) %% recordsPerPage) + 1
+  pageMax = floor((nrow(data) - 1) / recordsPerPage) + 1
   dir.create(paste(registerPath, "records", sep="/"))
   for(i in 1:pageMax) {
     html <- buildRecordsIndexPage(data, registerName, registerPath, detailFields, i, idField, linkFields, recordsPerPage)
@@ -87,7 +97,7 @@ buildRecordsIndexPage <- function(data, registerName, registerPath, detailFields
   RowData <- buildRecordsIndexPageRows(data, detailFields, MinRecord, MaxRecord, idField)
   
   PageNumber <- pageNo
-  PageTotal <- ((TotalRecords - 1) %% recordsPerPage) + 1
+  PageTotal <- floor((TotalRecords - 1) / recordsPerPage) + 1
   
   if(pageNo == 1) {
     PreviousVisibility <- "hidden"
